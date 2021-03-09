@@ -62,7 +62,7 @@ cv2.rectangle(draw_img, (80, 550), (350, 800), (0, 200, 200), 5)
 
 # (target_img, center cord., radius, color, border-thickness)
 cv2.circle(draw_img, (width//2 + 290, height//2 + 10), 350, (150, 0, 250), 5)
-cv2.circle(draw_img, (width//2 + 290, height//2 + 10), 100, (200, 0, 200), 5)
+cv2.circle(draw_img, (width//2 + 290, height//2 + 10), 100, (200, 0, 200), -1)
 
 # note that border-thickness = -1 means to fill up the shape
 
