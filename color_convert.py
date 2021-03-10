@@ -22,10 +22,16 @@ cv2.imwrite('pic/hsv.jpg', hsv_img)
 
 # -----bgr-gray-----
 # [:, :, n] means to keep the height and width, but channel n only. So is a gray image.
+# Slice the img by not simply using ":", e.g., slice_img = origin_img[200:300, 400:700, 0]
 
-blue_gray_img = cv2.imwrite('pic/blue_gray.jpg', origin_img[:, :, 0])
-green_gray_img = cv2.imwrite('pic/green_gray.jpg', origin_img[:, :, 1])
-gred_gray_img = cv2.imwrite('pic/red_gray.jpg', origin_img[:, :, 2])
+blue_gray_img = origin_img[:, :, 0]
+cv2.imwrite('pic/blue_gray.jpg', blue_gray_img)
+
+green_gray_img = origin_img[:, :, 1]
+cv2.imwrite('pic/green_gray.jpg', green_gray_img)
+
+red_gray_img = origin_img[:, :, 2]
+cv2.imwrite('pic/red_gray.jpg', red_gray_img)
 
 # -----bgr-color-----
 # If wan the blue-color-only image, let [:, :, 1] and [:, :, 2] be all zeros.
@@ -33,6 +39,7 @@ gred_gray_img = cv2.imwrite('pic/red_gray.jpg', origin_img[:, :, 2])
 
 # create a template image with three channels all zero: black image
 template_img = np.zeros((height, width, 3), np.uint8)
+template_img.fill(0);
 cv2.imwrite('pic/template.jpg', template_img)
 
 blue_color_img = template_img.copy()
@@ -53,16 +60,17 @@ cv2.imwrite('pic/red_color.jpg', red_color_img)
 # -----shape-drawing-----
 
 draw_img = origin_img
+line_type = cv2.LINE_AA # antialiased line
 
-# (target_img, left-start cord., right-end cord., color, border-thickness)
-cv2.line(draw_img, (height//2, 10), (10, width//2), (50, 150, 200), 5)
+# (target_img, left-start coord., right-end coord., color, [border-thickness, [line-type]])
+cv2.line(draw_img, (height//2, 10), (10, width//2), (50, 150, 200), 5, line_type)
 
-# (target_img, upper-left cord., lower-right cord., color, border-thickness)
-cv2.rectangle(draw_img, (80, 550), (350, 800), (0, 200, 200), 5)
+# (target_img, upper-left coord., lower-right coord., color, [border-thickness, [line-type]])
+cv2.rectangle(draw_img, (80, 550), (350, 800), (0, 200, 200), 5, line_type)
 
-# (target_img, center cord., radius, color, border-thickness)
-cv2.circle(draw_img, (width//2 + 290, height//2 + 10), 350, (150, 0, 250), 5)
-cv2.circle(draw_img, (width//2 + 290, height//2 + 10), 100, (200, 0, 200), -1)
+# (target_img, center coord., radius, color, [border-thickness, [line-type]])
+cv2.circle(draw_img, (width//2 + 290, height//2 + 10), 350, (150, 0, 250), 5, line_type)
+cv2.circle(draw_img, (width//2 + 290, height//2 + 10), 100, (200, 0, 200), -1, line_type)
 
 # note that border-thickness = -1 means to fill up the shape
 
@@ -70,6 +78,6 @@ cv2.circle(draw_img, (width//2 + 290, height//2 + 10), 100, (200, 0, 200), -1)
 
 text = 'donuts!'
 font = cv2.FONT_HERSHEY_SCRIPT_SIMPLEX
-# (target_img, message, start cord., font-style, font-size, color, thickness)
-cv2.putText(draw_img, text, (120, 200), font, 10, (255, 100, 200), 5)
+# (target_img, message, start coord., font-style, font-size, color, [thickness, [line-type]])
+cv2.putText(draw_img, text, (120, 200), font, 10, (255, 100, 200), 5, line_type)
 cv2.imwrite('pic/draw.jpg', draw_img)
