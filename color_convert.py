@@ -39,7 +39,6 @@ cv2.imwrite('pic/red_gray.jpg', red_gray_img)
 
 # create a template image with three channels all zero: black image
 template_img = np.zeros((height, width, 3), np.uint8)
-template_img.fill(0);
 cv2.imwrite('pic/template.jpg', template_img)
 
 blue_color_img = template_img.copy()
