@@ -5,8 +5,8 @@ def get_rid_of_black_spot(show: bool = False) -> np.ndarray:
     circle_gray = cv2.imread('pic/circle.png', cv2.COLOR_BGR2GRAY)
 
     ret, circle_bin = cv2.threshold(circle_gray, 127, 255, cv2.THRESH_BINARY)
-    circle_dilate = cv2.dilate(circle_bin, np.ones((5, 5)), iterations=6)
-    circle_erode = cv2.erode(circle_dilate, np.ones((5, 5)), iterations=6)
+    circle_dilate = cv2.dilate(circle_bin, np.ones((5, 6)), iterations=5)
+    circle_erode = cv2.erode(circle_dilate, np.ones((5, 6)), iterations=5)
 
     if show:
         cv2.imwrite('pic/circle_gray.png', circle_gray)
