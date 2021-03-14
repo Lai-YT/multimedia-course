@@ -1,42 +1,30 @@
 import cv2
 import numpy as np
 
-def get_rid_of_black_spot(show: bool = False) -> np.ndarray:
-    circle_gray = cv2.imread('pic/circle.png', cv2.COLOR_BGR2GRAY)
+# -----circle-----
 
-    ret, circle_bin = cv2.threshold(circle_gray, 127, 255, cv2.THRESH_BINARY)
-    circle_dilate = cv2.dilate(circle_bin, np.ones((5, 6)), iterations=5)
-    circle_erode = cv2.erode(circle_dilate, np.ones((5, 6)), iterations=5)
+circle_gray = cv2.imread('pic/circle.png', cv2.COLOR_BGR2GRAY)
+cv2.imwrite('pic/circle_gray.png', circle_gray)
 
-    if show:
-        cv2.imwrite('pic/circle_gray.png', circle_gray)
-        cv2.imwrite('pic/circle_bin.png', circle_bin)
-        cv2.imwrite('pic/circle_dilate.png', circle_dilate)
+# image only in black and white
+ret, circle_bin = cv2.threshold(circle_gray, 127, 255, cv2.THRESH_BINARY)
+cv2.imwrite('pic/circle_bin.png', circle_bin)
 
-    return circle_erode
+# using close operation to get rid of small black spot.
+# same as dilate first, and than erode
+circle_unspot = cv2.morphologyEx(circle_bin, cv2.MORPH_CLOSE, np.ones((5, 6)), iterations=5)
+cv2.imwrite('pic/circle_unspot.png', circle_unspot)
 
+# -----man-----
 
-def get_border_line(show: bool = False) -> np.ndarray:
-    man_gray = cv2.imread('pic/man.png', cv2.COLOR_BGR2GRAY)
+man_gray = cv2.imread('pic/man.png', cv2.COLOR_BGR2GRAY)
+cv2.imwrite('pic/man_gray.png', man_gray)
 
-    ret, man_bin = cv2.threshold(man_gray, 127, 255, cv2.THRESH_BINARY)
-    man_erode = cv2.erode(man_bin, np.ones((3, 3)), iterations=4)
+# image only in black and white
+ret, man_bin = cv2.threshold(man_gray, 127, 255, cv2.THRESH_BINARY)
+cv2.imwrite('pic/man_bin.png', man_bin)
 
-    if show:
-        cv2.imwrite('pic/man_gray.png', man_gray)
-        cv2.imwrite('pic/man_bin.png', man_bin)
-        cv2.imwrite('pic/man_erode.png', man_erode)
-
-    return man_bin - man_erode
-
-
-def main() -> None:
-    circle_erode = get_rid_of_black_spot(show=True)
-    cv2.imwrite('pic/circle_erode.png', circle_erode)
-
-    man_border = get_border_line(show=True)
-    cv2.imwrite('pic/man_border.png', man_border)
-
-
-if __name__ == '__main__':
-    main()
+# using gradient to get the contour line.
+# same as dilate - erode
+man_border = cv2.morphologyEx(man_bin, cv2.MORPH_GRADIENT, np.ones((3, 3)), iterations=4)
+cv2.imwrite('pic/man_border.png', man_border)
