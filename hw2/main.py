@@ -26,5 +26,5 @@ cv2.imwrite('pic/man_bin.png', man_bin)
 
 # using gradient to get the contour line.
 # same as dilate - erode
-man_border = cv2.morphologyEx(man_bin, cv2.MORPH_GRADIENT, np.ones((3, 3)), iterations=4)
+man_border = cv2.morphologyEx(man_bin, cv2.MORPH_GRADIENT, np.ones((3, 3)), iterations=2)
 cv2.imwrite('pic/man_border.png', man_border)
