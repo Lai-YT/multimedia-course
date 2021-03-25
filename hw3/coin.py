@@ -1,4 +1,5 @@
 import cv2
+import color_table as ct
 import numpy as np
 
 def get_coin() -> None:
@@ -12,10 +13,6 @@ def get_coin() -> None:
 
     num_labels, _, stats, _ = cv2.connectedComponentsWithStats(coin_adjust, connectivity=8, ltype=cv2.CV_32S)
 
-    red = (0, 0, 255) # 1 dollar
-    orange = (0, 97, 200) # 5 dollar
-    yellow = (0, 255, 255) # 10 dollar
-    green = (0, 255, 0) # 50 dollar
     coin_value = 0
     result_target_coin = cv2.imread('pic/coin_resize.jpg')
 
@@ -28,23 +25,23 @@ def get_coin() -> None:
         if area < 4000:
             continue
         if side_len >= 120:
-            color = green
+            color = ct.green
             coin_value += 50
         elif side_len >= 100:
-            color = yellow
+            color = ct.yellow
             coin_value += 10
         elif side_len >= 90:
-            color = orange
+            color = ct.orange
             coin_value += 5
         else:
-            color = red
+            color = ct.red
             coin_value += 1
 
         # (target_img, upper-left coord., lower-right coord., color, [border-thickness, [line-type]])
         cv2.rectangle(result_target_coin, (x - 10, y - 10), (x + width + 10, y + height + 10), color, 1, cv2.LINE_AA)
 
     # (target_img, message, start coord., font-style, font-size, color, [thickness, [line-type]])
-    cv2.putText(result_target_coin, f'coin value = {coin_value}', (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 150, 200), 1, cv2.LINE_AA)
+    cv2.putText(result_target_coin, f'coin value = {coin_value}', (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, ct.white, 1, cv2.LINE_AA)
     cv2.imwrite('pic/coin_get.jpg', result_target_coin)
 
     return  # end get_coin
