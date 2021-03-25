@@ -40,7 +40,7 @@ def get_coin_2() -> None:
             color = ct.orange
             coin_value += 5
         else:
-            color =  ct.red
+            color = ct.red
             coin_value += 1
 
         # (target_img, upper-left coord., lower-right coord., color, [border-thickness, [line-type]])
