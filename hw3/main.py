@@ -3,7 +3,7 @@ import coin
 import coin2
 import floor
 
-# coin.get_coin()
-# coin2.get_coin_2()
+coin.get_coin()
 floor.get_floor()
-# apple.get_apple()
+coin2.get_coin_2()
+apple.get_apple()
