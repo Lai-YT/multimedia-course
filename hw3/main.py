@@ -5,5 +5,5 @@ import floor
 
 coin.get_coin()
 floor.get_floor()
-coin2.get_coin_2()
+coin2.get_coin2()
 apple.get_apple()

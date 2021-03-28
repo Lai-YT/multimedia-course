@@ -31,7 +31,7 @@ def threshold_binary(src_img, threshold):
     _, bin_img = cv2.threshold(src_img, threshold, 255, cv2.THRESH_BINARY)
     return bin_img
 
-def clean_background_and_inner(coin_origin):
+def clean_background_and_inner(origin):
     """
     Takes the coin with background and inner black noises,
     clean them and return the clean coin back.
@@ -41,19 +41,19 @@ def clean_background_and_inner(coin_origin):
     # So blur and use more erode than dilate to shrink coin circle and clean noises.
     # Another binarization with higher threshold value is used to get the coin back.
 
-    coin_gray = cv2.cvtColor(coin_origin, cv2.COLOR_BGR2GRAY)
+    gray = cv2.cvtColor(origin, cv2.COLOR_BGR2GRAY)
 
-    coin_bin = threshold_binary(coin_gray, 70)
-    cv2.imwrite('coin_pic/coin_bin.jpg', coin_bin)
+    bin = threshold_binary(gray, 70)
+    cv2.imwrite('coin_pic/bin.jpg', bin)
 
-    coin_blur = cv2.GaussianBlur(coin_bin, (5, 5), 0)
+    blur = cv2.GaussianBlur(bin, (5, 5), 0)
 
-    coin_adjust = cv2.erode(coin_blur, np.ones((3, 3)), iterations=10)
-    coin_adjust = cv2.dilate(coin_adjust, np.ones((3, 3)), iterations=5)
+    adjust = cv2.erode(blur, np.ones((3, 3)), iterations=10)
+    adjust = cv2.dilate(adjust, np.ones((3, 3)), iterations=5)
 
-    coin_clean = threshold_binary(coin_adjust, 150)
+    clean = threshold_binary(adjust, 150)
 
-    return coin_clean  # end coin_background_and_inner_clean
+    return clean  # end background_and_inner_clean
 
 def get_coin() -> None:
     # height = 4000, width = 2250
@@ -62,12 +62,12 @@ def get_coin() -> None:
     # this variable coin will later be used as the target_img, add in rectangles and text.
     coin = cv2.resize(coin, (1000, 562))
 
-    coin_clean = clean_background_and_inner(coin)
-    cv2.imwrite('coin_pic/coin_clean.jpg', coin_clean)
+    clean = clean_background_and_inner(coin)
+    cv2.imwrite('coin_pic/clean.jpg', clean)
 
-    num_labels, _, stats, _ = cv2.connectedComponentsWithStats(coin_clean, connectivity=8, ltype=cv2.CV_32S)
+    num_labels, _, stats, _ = cv2.connectedComponentsWithStats(clean, connectivity=8, ltype=cv2.CV_32S)
 
-    coin_value = 0
+    total_value = 0
 
     # stats[0] is the background, stats[15] is a small noise spot at the lower left
     for stat in stats[1:15]:
@@ -75,7 +75,7 @@ def get_coin() -> None:
         x, y, width, height, area = map(int, stat)
 
         color, value = get_color_and_value(max(width, height))
-        coin_value += value
+        total_value += value
 
         cv2.rectangle(coin, # target_img
                       (x - 10, y - 10), #  upper-left coord.
@@ -83,12 +83,12 @@ def get_coin() -> None:
                       color, 1, cv2.LINE_AA) #  color, [border-thickness, [line-type]]
 
     cv2.putText(coin, #  target_img
-                f'coin value = {coin_value}', # text
+                f'coin value = {total_value}', # text
                 (50, 50), #  start coord.
                 cv2.FONT_HERSHEY_SIMPLEX, #  font style
                 1, ct.white, 1, cv2.LINE_AA) #  font size, color, [thickness, [line-type]]
 
-    cv2.imwrite('coin_pic/coin_get.jpg', coin)
+    cv2.imwrite('coin_pic/get.jpg', coin)
 
     return  # end get_coin
 
