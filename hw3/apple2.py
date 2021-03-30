@@ -1,11 +1,10 @@
 import cv2
 import numpy as np
 
-apple = cv2.imread('pic/apple.jpg')
-orange = cv2.imread('pic/orange.jpg')
+apple = cv2.imread('apple_pic/apple.jpg')
+orange = cv2.imread('apple_pic/orange.jpg')
 
 apple_copy = apple.copy()
-
 
 # Guassian Pyramids for apple
 apple_guassian = [apple_copy]
@@ -59,8 +58,8 @@ for i in range(1,6):
     apple_orange_reconstruct = cv2.add(apple_orange_pyramid[i],apple_orange_reconstruct)
     
     
-cv2.imshow("apple",apple)
-cv2.imshow("orange",orange)
-cv2.imshow("apple_orange_reconstruct",apple_orange_reconstruct)
+cv2.imwrite("apple_pic/apple.jpg",apple)
+cv2.imwrite("apple_pic/orange.jpg",orange)
+cv2.imwrite("apple_pic/apple_orange_reconstruct.jpg",apple_orange_reconstruct)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
